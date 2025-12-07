@@ -1,6 +1,5 @@
 import { adminPool } from '../config/db.js';
 
-// --- BANDARA ---
 export const lihatBandara = async (req, res) => {
   const { nama } = req.query;
   try {
@@ -34,7 +33,6 @@ export const hapusBandara = async (req, res) => {
   }
 };
 
-// --- MASKAPAI ---
 export const lihatMaskapai = async (req, res) => {
   const { nama } = req.query;
   try {
@@ -68,7 +66,6 @@ export const hapusMaskapai = async (req, res) => {
   }
 };
 
-// --- RUTE ---
 export const lihatRute = async (req, res) => {
   const { asal, tujuan } = req.query;
   try {
@@ -102,7 +99,6 @@ export const hapusRute = async (req, res) => {
   }
 };
 
-// --- PENERBANGAN (JADWAL) ---
 export const tambahPenerbangan = async (req, res) => {
   const { id_maskapai, id_rute, waktu_penerbangan, nomor_penerbangan } = req.body;
     
@@ -142,7 +138,6 @@ export const hapusPenerbangan = async (req, res) => {
   }
 };
 
-// --- KURSI ---
 export const tambahKursi = async (req, res) => {
   const { id_penerbangan, nomor_kursi, kelas, harga } = req.body;
 
@@ -158,7 +153,6 @@ export const tambahKursi = async (req, res) => {
   }
 }
 
-// --- USER MONITORING ---
 export const lihatPengguna = async (req, res) => {
   const { nama } = req.query;
   try {
