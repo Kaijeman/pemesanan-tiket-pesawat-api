@@ -10,7 +10,7 @@ export const adminPool = mysql.createPool({
   database: process.env.DB_NAME,
 });
 
-export const userPool = mysql.createPool({
+export const clientPool = mysql.createPool({
   host: process.env.DB_HOST,
   user: process.env.DB_CLIENT_USER,
   password: process.env.DB_CLIENT_PASSWORD,
