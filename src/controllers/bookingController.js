@@ -1,6 +1,6 @@
 import { clientPool } from '../config/db.js';
 
-export const buatPemesanan = async (req, res) => {
+export const buatReservasi = async (req, res) => {
   const id_pelanggan = req.user.id_user;
 
   try {
@@ -12,7 +12,7 @@ export const buatPemesanan = async (req, res) => {
       data: data
     });
   } catch (error) {
-    console.error("Gagal buat booking:", error);
+    console.error("Gagal buat reservasi:", error);
     return res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 };
@@ -29,6 +29,9 @@ export const tambahPenumpang = async (req, res) => {
     return res.status(201).json({ message: "Penumpang dan tiket berhasil ditambahkan." });
   } catch (error) {
     console.error("Gagal tambah penumpang:", error);
+    if (error.sqlState === '45000') {
+      return res.status(409).json({ error: error.message });
+    }
     return res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 };
@@ -44,12 +47,15 @@ export const prosesBayar = async (req, res) => {
     );
     return res.status(200).json({ message: "Pembayaran berhasil diproses." });
   } catch (error) {
-    console.error("Gagal bayar:", error);
+    console.error("Gagal melakukan pembayaran:", error);
+    if (error.sqlState === '45000') {
+      return res.status(400).json({ error: error.message });
+    }
     return res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 };
 
-export const batalkanPesanan = async (req, res) => {
+export const batalkanReservasi = async (req, res) => {
   const { kode } = req.params;
   const id_pelanggan = req.user.id_user;
 
@@ -58,25 +64,28 @@ export const batalkanPesanan = async (req, res) => {
       'CALL sp_batalkan_reservasi(?, ?)', 
       [id_pelanggan, kode]
     );
-    return res.status(200).json({ message: "Pesanan berhasil dibatalkan" });
+    return res.status(200).json({ message: "Reservasi berhasil dibatalkan" });
   } catch (error) {
-    console.error("Gagal batal:", error);
-    return res.status(400).json({ error: "Gagal membatalkan (Mungkin sudah lunas atau salah kode)." });
+    console.error("Gagal membatalkan reservasi:", error);
+    if (error.sqlState === '45000') {
+      return res.status(400).json({ error: error.message });
+    }
+    return res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 };
 
-export const riwayatPemesanan = async (req, res) => {
+export const riwayatReservasi = async (req, res) => {
   const { kode } = req.query;
 
   try {
     const [rows] = await clientPool.query('CALL sp_get_daftar_reservasi(?)', [kode || null]);
 
     return res.status(200).json({
-      message: "Riwayat pesanan",
+      message: "Riwayat reservasi",
       data: rows[0]
     });
   } catch (error) {
-    console.error("Gagal ambil riwayat:", error);
+    console.error("Gagal ambil riwayat reservasi:", error);
     return res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 };
@@ -87,11 +96,11 @@ export const detailTiket = async (req, res) => {
   try {
     const [rows] = await clientPool.query('CALL sp_get_detail_tiket(?)', [kode]);
     return res.status(200).json({
-      message: "Detail tiket ditemukan",
+      message: "Detail tiket",
       data: rows[0]
     });
   } catch (error) {
-    console.error("Gagal ambil detail:", error);
+    console.error("Gagal ambil detail tiket:", error);
     return res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 };

@@ -1,10 +1,10 @@
 import express from 'express';
 import { 
-  buatPemesanan, 
+  buatReservasi, 
   tambahPenumpang, 
   prosesBayar, 
-  batalkanPesanan, 
-  riwayatPemesanan, 
+  batalkanReservasi, 
+  riwayatReservasi, 
   detailTiket 
 } from '../controllers/bookingController.js';
 import { verifyToken } from '../middlewares/authMiddleware.js';
@@ -13,12 +13,12 @@ const router = express.Router();
 
 router.use(verifyToken);
 
-router.post('/', buatPemesanan);                
+router.post('/', buatReservasi);                
 router.post('/detail', tambahPenumpang);        
 router.post('/:kode/bayar', prosesBayar);       
-router.post('/:kode/batal', batalkanPesanan);   
+router.post('/:kode/batal', batalkanReservasi);   
 
-router.get('/', riwayatPemesanan);              
+router.get('/', riwayatReservasi);              
 router.get('/:kode', detailTiket);              
 
 export default router;

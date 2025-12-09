@@ -29,6 +29,9 @@ export const hapusBandara = async (req, res) => {
     return res.status(200).json({ message: "Bandara berhasil dihapus" });
   } catch (error) {
     console.error("Gagal hapus bandara:", error);
+    if (error.sqlState === '45000') {
+      return res.status(400).json({ error: error.message });
+    }
     return res.status(500).json({ error: "Gagal menghapus bandara (Sedang digunakan)." });
   }
 };
@@ -62,6 +65,9 @@ export const hapusMaskapai = async (req, res) => {
     return res.status(200).json({ message: "Maskapai berhasil dihapus" });
   } catch (error) {
     console.error("Gagal hapus maskapai:", error);
+    if (error.sqlState === '45000') {
+      return res.status(400).json({ error: error.message });
+    }
     return res.status(500).json({ error: "Gagal menghapus maskapai." });
   }
 };
@@ -95,6 +101,9 @@ export const hapusRute = async (req, res) => {
     return res.status(200).json({ message: "Rute berhasil dihapus" });
   } catch (error) {
     console.error("Gagal hapus rute:", error);
+    if (error.sqlState === '45000') {
+      return res.status(400).json({ error: error.message });
+    }
     return res.status(500).json({ error: "Gagal menghapus rute." });
   }
 };
@@ -134,6 +143,9 @@ export const hapusPenerbangan = async (req, res) => {
     return res.status(200).json({ message: "Penerbangan berhasil dihapus" });
   } catch (error) {
     console.error("Gagal hapus penerbangan:", error);
+    if (error.sqlState === '45000') {
+      return res.status(400).json({ error: error.message });
+    }
     return res.status(500).json({ error: "Gagal menghapus penerbangan." });
   }
 };
@@ -149,9 +161,26 @@ export const tambahKursi = async (req, res) => {
     return res.status(201).json({ message: "Kursi berhasil ditambahkan" });
   } catch (error) {
     console.error("Gagal tambah kursi:", error);
+    if (error.sqlState === '45000') {
+      return res.status(409).json({ error: error.message });
+    }
     return res.status(500).json({ error: "Terjadi kesalahan pada server." });
   }
 }
+
+export const hapusKursi = async (req, res) => {
+  const { id } = req.params;
+  try {
+    await adminPool.query('CALL sp_hapus_kursi(?)', [id]);
+    return res.status(200).json({ message: "Kursi berhasil dihapus" });
+  } catch (error) {
+    console.error("Gagal hapus kursi:", error);
+    if (error.sqlState === '45000') {
+      return res.status(400).json({ error: error.message });
+    }
+    return res.status(500).json({ error: "Gagal menghapus kursi (Mungkin sudah terjual atau error server)." });
+  }
+};
 
 export const lihatPengguna = async (req, res) => {
   const { nama } = req.query;

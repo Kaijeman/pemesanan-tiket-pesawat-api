@@ -13,6 +13,7 @@ import {
   updateJadwal, 
   hapusPenerbangan,
   tambahKursi,
+  hapusKursi,
   lihatPengguna
 } from '../controllers/adminController.js';
 import { verifyToken, verifyAdmin } from '../middlewares/authMiddleware.js';
@@ -44,6 +45,7 @@ router.delete('/penerbangan/:id', hapusPenerbangan);
 
 // Kursi
 router.post('/kursi', tambahKursi);
+router.delete('/kursi/:id', hapusKursi);
 
 // Pengguna
 router.get('/pengguna', lihatPengguna);

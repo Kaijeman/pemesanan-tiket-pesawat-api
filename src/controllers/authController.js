@@ -17,6 +17,11 @@ export const registrasi = async (req, res) => {
     });
   } catch (error) {
     console.error("Gagal registrasi:", error);
+    if (error.code === 'ER_DUP_ENTRY') {
+      return res.status(409).json({ 
+        error: "Email sudah terdaftar. Silahkan gunakan email lain." 
+      });
+    }
     return res.status(500).json({ 
       error: "Terjadi kesalahan pada server." 
     });
