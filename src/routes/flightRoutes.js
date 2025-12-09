@@ -1,9 +1,9 @@
 import express from 'express';
-import { cariJadwal, lihatKursiTersedia } from '../controllers/flightController.js';
+import { cariJadwalPenerbangan, lihatKursiTersedia } from '../controllers/flightController.js';
 
 const router = express.Router();
 
-router.get('/cari', cariJadwal);
+router.get('/cari', cariJadwalPenerbangan);
 router.get('/:id/kursi', lihatKursiTersedia);
 
 export default router;

@@ -108,6 +108,17 @@ export const hapusRute = async (req, res) => {
   }
 };
 
+export const lihatPenerbanganAdmin = async (req, res) => {
+  const { asal, tujuan, tanggal } = req.query;
+  try {
+    const [rows] = await adminPool.query('CALL sp_cari_jadwal_penerbangan(?, ?, ?)', [asal, tujuan, tanggal]);
+    return res.status(200).json({ message: "Penerbangan ditemukan", data: rows[0] });
+  } catch (error) {
+    console.error("Gagal cari penerbangan:", error);
+    return res.status(500).json({ error: "Terjadi kesalahan pada server." });
+  }
+};
+
 export const tambahPenerbangan = async (req, res) => {
   const { id_maskapai, id_rute, waktu_penerbangan, nomor_penerbangan } = req.body;
     
@@ -150,6 +161,17 @@ export const hapusPenerbangan = async (req, res) => {
   }
 };
 
+export const lihatKursiAdmin = async (req, res) => {
+  const { id } = req.params;
+  try {
+    const [rows] = await adminPool.query('CALL sp_get_kursi_tersedia(?)', [id]);
+    return res.status(200).json({ message: "Data Kursi tersedia", data: rows[0] });
+  } catch (error) {
+    console.error("Gagal ambil kursi:", error);
+    return res.status(500).json({ error: "Terjadi kesalahan pada server." });
+  }
+};
+
 export const tambahKursi = async (req, res) => {
   const { id_penerbangan, nomor_kursi, kelas, harga } = req.body;
 
@@ -185,8 +207,8 @@ export const hapusKursi = async (req, res) => {
 export const lihatPengguna = async (req, res) => {
   const { nama } = req.query;
   try {
-    const [rows] = await adminPool.query('CALL sp_get_daftar_pelanggan(?)', [nama || null]);
-    return res.status(200).json({ message: "Data pelanggan diambil", data: rows[0] });
+    const [rows] = await adminPool.query('CALL sp_get_daftar_pengguna(?)', [nama || null]);
+    return res.status(200).json({ message: "Data pengguna diambil", data: rows[0] });
   } catch (error) {
     console.error("Gagal ambil user:", error);
     return res.status(500).json({ error: "Terjadi kesalahan pada server." });

@@ -9,9 +9,11 @@ import {
   lihatRute, 
   tambahRute, 
   hapusRute,
+  lihatPenerbanganAdmin,
   tambahPenerbangan, 
   updateJadwal, 
   hapusPenerbangan,
+  lihatKursiAdmin,
   tambahKursi,
   hapusKursi,
   lihatPengguna
@@ -39,11 +41,13 @@ router.post('/rute', tambahRute);
 router.delete('/rute/:id', hapusRute);
 
 // Penerbangan
+router.get('/penerbangan', lihatPenerbanganAdmin);
 router.post('/penerbangan', tambahPenerbangan);
 router.put('/penerbangan/:id', updateJadwal);
 router.delete('/penerbangan/:id', hapusPenerbangan);
 
 // Kursi
+router.get('/penerbangan/:id/kursi', lihatKursiAdmin);
 router.post('/kursi', tambahKursi);
 router.delete('/kursi/:id', hapusKursi);
 

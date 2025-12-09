@@ -1,6 +1,6 @@
 import { clientPool } from '../config/db.js';
 
-export const cariJadwal = async (req, res) => {
+export const cariJadwalPenerbangan = async (req, res) => {
   const { asal, tujuan, tanggal } = req.query;
 
   try {
