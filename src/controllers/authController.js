@@ -28,18 +28,16 @@ export const registrasi = async (req, res) => {
   }
 };
 
-
-
 export const loginPelanggan = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const [rows] = await clientPool.query('CALL sp_login(?, ?)', [email, password]);
+    const [rows] = await clientPool.query('CALL sp_login(?, ?)', [email, password, 'Pelanggan']);
     const result = rows[0]?.[0];
 
-    if (!result || result.success === 0 || result.role !== 'Pelanggan') {
+    if (!result || result.success === 0) {
       return res.status(401).json({
-        message: result?.pesan || "Email atau password salah atau Anda bukan Admin"
+        message: result.pesan
       });
     }
 
@@ -53,7 +51,7 @@ export const loginPelanggan = async (req, res) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET);
 
     return res.status(200).json({
-      message: "Login berhasil",
+      message: result.pesan,
       token: token,
       user: payload
     });
@@ -68,11 +66,13 @@ export const loginPelanggan = async (req, res) => {
 export const loginAdmin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const [rows] = await adminPool.query('CALL sp_login(?, ?)', [email, password]);
+    const [rows] = await adminPool.query('CALL sp_login(?, ?)', [email, password, 'Admin']);
     const result = rows[0]?.[0];
 
-    if (!result || result.success === 0 || result.role !== 'Admin') {
-      return res.status(401).json({ message: "Email atau password salah atau Anda bukan Admin." });
+    if (!result || result.success === 0) {
+      return res.status(401).json({ 
+        message: result.pesan 
+      });
     }
 
     const payload = { 
@@ -85,8 +85,8 @@ export const loginAdmin = async (req, res) => {
     const token = jwt.sign(payload, process.env.JWT_SECRET);
 
     return res.status(200).json({ 
-      message: "Login Berhasil", 
-      token, 
+      message: result.pesan, 
+      token: token, 
       user: payload 
     });
   } catch (error) {

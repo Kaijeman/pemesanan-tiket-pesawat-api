@@ -24,7 +24,7 @@ app.use('/api/admin', adminRoutes);
 
 app.use('/api/penerbangan', flightRoutes);
 
-app.use('/api/pemesanan', bookingRoutes);
+app.use('/api/reservasi', bookingRoutes);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
