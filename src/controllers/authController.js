@@ -32,7 +32,7 @@ export const loginPelanggan = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const [rows] = await clientPool.query('CALL sp_login(?, ?)', [email, password, 'Pelanggan']);
+    const [rows] = await clientPool.query('CALL sp_login(?, ?, ?)', [email, password, 'Pelanggan']);
     const result = rows[0]?.[0];
 
     if (!result || result.success === 0) {
@@ -66,7 +66,7 @@ export const loginPelanggan = async (req, res) => {
 export const loginAdmin = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const [rows] = await adminPool.query('CALL sp_login(?, ?)', [email, password, 'Admin']);
+    const [rows] = await adminPool.query('CALL sp_login(?, ?, ?)', [email, password, 'Admin']);
     const result = rows[0]?.[0];
 
     if (!result || result.success === 0) {
